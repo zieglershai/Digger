@@ -1,4 +1,9 @@
-module gold_block(
+module gold_block
+#(
+	parameter  logic [10:0] board_position_X = 11'd32,
+	parameter  logic [10:0] board_position_Y = 11'd160
+)
+(
 	input clk,
 	input resetN,
 	input startOfFrame,
@@ -25,8 +30,8 @@ module gold_block(
 	
 	gold_moveCollision
 	#(
-			.INITIAL_X(160),
-			.INITIAL_Y(192)
+			.INITIAL_X(board_position_X + (5 * 32)),
+			.INITIAL_Y(board_position_Y + (1 * 32))
 	)
 	gold_mov_inst(
 		.clk(clk),
