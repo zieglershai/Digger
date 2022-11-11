@@ -1,22 +1,28 @@
-module	terrain_bit_map	(	
-					input	logic	clk,
-					input	logic	resetN,
-					input logic	[10:0] offsetX,// offset from top left  position 
-					input logic	[10:0] offsetY,
-					input 	[10:0]	alien_a_top_leftX,
-					input 	[10:0]	alien_a_top_leftY,
-					input 	[10:0]	gold_1_top_leftX,
-					input 	[10:0]	gold_1_top_leftY,
-					input	logic	InsideRectangle, //input that the pixel is within a bracket 
-					input logic playerHit,
-	
-	
-					output	logic  [3:0] free_direction_alien_a ,
-					output 				gold_1_can_fall,
+module	terrain_bit_map
+#(
+	parameter  logic [10:0] board_position_X = 11'd32,
+	parameter  logic [10:0] board_position_Y = 11'd160
+)
 
-					output	logic	drawingRequest, //output that the pixel should be dispalyed 
-					output	logic	[11:0] RGBout,  //rgb value from the bitmap 
-					output	logic	[3:0] HitEdgeCode //one bit per edge 
+	(	
+	input	logic	clk,
+	input	logic	resetN,
+	input logic	[10:0] offsetX,// offset from top left  position 
+	input logic	[10:0] offsetY,
+	input 	[10:0]	alien_a_top_leftX,
+	input 	[10:0]	alien_a_top_leftY,
+	input 	[10:0]	gold_1_top_leftX,
+	input 	[10:0]	gold_1_top_leftY,
+	input	logic	InsideRectangle, //input that the pixel is within a bracket 
+	input logic playerHit,
+
+
+	output	logic  [3:0] free_direction_alien_a ,
+	output 				gold_1_can_fall,
+
+	output	logic	drawingRequest, //output that the pixel should be dispalyed 
+	output	logic	[11:0] RGBout,  //rgb value from the bitmap 
+	output	logic	[3:0] HitEdgeCode //one bit per edge 
  ) ;
  
 	wire [3:0] alien_a_up, alien_a_right, alien_a_down, alien_a_left;
@@ -114,7 +120,7 @@ module	terrain_bit_map	(
 	always_ff@(posedge clk or negedge resetN)
 		begin
 			if(!resetN) begin
-				RGBout <=	8'h00; // transparent colour
+				RGBout <=	12'h000; // transparent colour
 				HitEdgeCode <= 4'h0;
 				terrain_maze <= initial_game_map;
 			end 
@@ -136,13 +142,13 @@ module	terrain_bit_map	(
 	
 	always_comb begin
 	
-		gold_1_x_cell = (gold_1_top_leftX - 11'd32) >> 5;
-		gold_1_y_cell = (gold_1_top_leftY - 11'd160) >> 5;
+		gold_1_x_cell = (gold_1_top_leftX - board_position_X) >> 5;
+		gold_1_y_cell = (gold_1_top_leftY - board_position_Y) >> 5;
 		// condition to going down is if we not at the last line and line below us is empty
 		gold_1_can_fall = gold_1_y_cell != 11'd9  && terrain_maze[gold_1_y_cell + 11'b1][gold_1_x_cell] == 2'b00; 
 		
-		alien_x_cell = (alien_a_top_leftX - 11'd32) >> 5;
-		alien_y_cell = (alien_a_top_leftY - 11'd160) >> 5;
+		alien_x_cell = (alien_a_top_leftX - board_position_X) >> 5;
+		alien_y_cell = (alien_a_top_leftY - board_position_Y) >> 5;
 		
 		drawingRequest = terrain_maze[offsetY[9:5] ][offsetX[9:5]] != 2'd00  & InsideRectangle;
 		

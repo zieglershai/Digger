@@ -254,7 +254,13 @@ periphery_control periphery_control_inst(
 	.out_to_ss(HEX4)
 );
 
-// Priority mux for the RGB
+
+
+parameter logic [10:0] board_position_X = 11'd32;
+parameter logic [10:0] board_position_Y = 11'd160;
+
+
+
 
 wire startOfFrame;
 assign startOfFrame = pxl_x == 32'b0 && pxl_y == 32'b0; 
@@ -363,7 +369,12 @@ player player_inst(
 );
 
 
-terrain	terrain_inst(
+terrain
+#(
+	.board_position_X(board_position_X),
+	.board_position_Y(board_position_Y)
+)
+terrain_inst(
 	 .clk(clk_25),
 	 .resetN(~A),
 	 .pixelX(pxl_x[10:0]),
