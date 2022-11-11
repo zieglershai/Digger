@@ -25,6 +25,6 @@ module game_controller	(
 	assign colision_fire = shot_dr  && ( drawing_request_terrain || alien_dr) ;
 	assign collision_gold_1 = gold_1_dr && (drawing_request_player || alien_dr);
 	assign player_eat_gold_1 = gold_1_dr && drawing_request_player && gold_1_state == 3'd2;
-	assign player_died = (alien_dr  || (gold_1_dr && gold_1_state == 4'd1))&  & drawing_request_player  && player_awake;
+	assign player_died = (alien_dr  || (gold_1_dr && gold_1_state == 4'd1))  & drawing_request_player  && player_awake;
 	assign alien_died_a = alien_dr & (shot_dr || (gold_1_dr && gold_1_state == 4'd1));
 endmodule

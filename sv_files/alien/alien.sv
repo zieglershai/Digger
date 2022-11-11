@@ -1,4 +1,10 @@
-module alien_bloc (
+module alien_bloc 
+#(
+	parameter  logic [10:0] board_position_X = 11'd32,
+	parameter  logic [10:0] board_position_Y = 11'd160
+)
+
+(
 	input clk,
 	input resetN,
 	input startOfFrame,
@@ -27,8 +33,8 @@ module alien_bloc (
 
 	alien_moveCollision
 	#(
-			.INITIAL_X(480),
-			.INITIAL_Y(160)
+			.INITIAL_X(board_position_X + (13 * 32)),
+			.INITIAL_Y(board_position_Y + 0)
 	)
 	 alien_mov_inst(
 		.clk(clk),

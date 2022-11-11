@@ -390,36 +390,43 @@ terrain_inst(
 	 .terrainRGB(terrain_RGB)
 );
 
-alien_bloc alien_1(
-	 .clk(clk_25),
-	 .resetN(~A),
-	 .startOfFrame(startOfFrame),
-	 .pixelX(pxl_x[10:0]),
-	 .pixelY(pxl_y[10:0]),
-	 .player_top_leftX(playerTLX),
-	 .player_top_leftY(playerTLY),
-	 .alien_top_leftX(alien_a_top_leftX),
-	 .alien_top_leftY(alien_a_top_leftY),
-	 .alien_died(alien_died_a),
-	 .free_direction_alien_a(free_direction_alien_a),
-	 .alien_dr(alien_dr),
-	 .alien_RGB(alien_RGB)
+alien_bloc 
+#(
+	.board_position_X(board_position_X),
+	.board_position_Y(board_position_Y)
+)
+alien_1
+(
+	.clk(clk_25),
+	.resetN(~A),
+	.startOfFrame(startOfFrame),
+	.pixelX(pxl_x[10:0]),
+	.pixelY(pxl_y[10:0]),
+	.player_top_leftX(playerTLX),
+	.player_top_leftY(playerTLY),
+	.alien_top_leftX(alien_a_top_leftX),
+	.alien_top_leftY(alien_a_top_leftY),
+	.alien_died(alien_died_a),
+	.player_died(player_died),
+	.free_direction_alien_a(free_direction_alien_a),
+	.alien_dr(alien_dr),
+	.alien_RGB(alien_RGB)
 );
 
 shots_block shot_inst (
-    .clk(clk_25),
-    .resetN(~A),
-    .pixelX(pxl_x[10:0]),
-    .pixelY(pxl_y[10:0]),
-    .startOfFrame(startOfFrame),
-    .fireCollision(colision_fire),
-    .playerXPosition(playerTLX),
-    .playerYPosition(playerTLY),
-	 .player_direction(player_direction),
-    .fire_pressed(B),// fire pressed
-    .shotRGB(shotRGB),
-    .shot_dr(shot_dr)
-);
+	.clk(clk_25),
+	.resetN(~A),
+	.pixelX(pxl_x[10:0]),
+	.pixelY(pxl_y[10:0]),
+	.startOfFrame(startOfFrame),
+	.fireCollision(colision_fire),
+	.playerXPosition(playerTLX),
+	.playerYPosition(playerTLY),
+	.player_direction(player_direction),
+	.fire_pressed(B),// fire pressed
+	.shotRGB(shotRGB),
+	.shot_dr(shot_dr)
+	);
 
 
 gold_block gold_bloc_1_inst(
