@@ -11,13 +11,20 @@ module terrain
 	input 	[10:0] 	pixelX,
 	input 	[10:0]	pixelY,
 	input					player_inside,
-	input 	[10:0]	alien_a_top_leftX,
-	input 	[10:0]	alien_a_top_leftY,
+	input 	[10:0]	alien_a_top_leftX_a,
+	input 	[10:0]	alien_a_top_leftY_a,
+	input 	[10:0]	alien_a_top_leftX_b,
+	input 	[10:0]	alien_a_top_leftY_b,
 	input 	[10:0]	gold_1_top_leftX,
 	input 	[10:0]	gold_1_top_leftY,					
 	
 	output	[3:0]		free_direction_alien_a ,
+	output	[3:0]		free_direction_alien_b ,
+
 	output 				gold_1_can_fall,
+	output 				empty_square_terrain,
+	output	logic		dimond_eaten,
+	output	logic		all_dimond_eaten,
 	output 				terrainDR,
 	output 	[11:0] 	terrainRGB
 
@@ -59,12 +66,19 @@ terrain_bit_map
 					.offsetY(terrainOffsetY),
 					.InsideRectangle(terrain_rec_dr),
 					.playerHit(player_inside),
-					.alien_a_top_leftX(alien_a_top_leftX),
-					.alien_a_top_leftY(alien_a_top_leftY),
+					.alien_top_leftX_a(alien_a_top_leftX_a),
+					.alien_top_leftY_a(alien_a_top_leftY_a),
+					.alien_top_leftX_b(alien_a_top_leftX_b),
+					.alien_top_leftY_b(alien_a_top_leftY_b),
 					.free_direction_alien_a(free_direction_alien_a),
+					.free_direction_alien_b(free_direction_alien_b),
+
 					.gold_1_top_leftX(gold_1_top_leftX),
 					.gold_1_top_leftY(gold_1_top_leftY),
 					.gold_1_can_fall(gold_1_can_fall),
+					.empty_square_terrain(empty_square_terrain),
+					.all_dimond_eaten(all_dimond_eaten),
+					.dimond_eaten(dimond_eaten),
 					.drawingRequest(terrainDR),
 					.RGBout(terrainRGB)
 );

@@ -1,4 +1,9 @@
-module shots_block(
+module shots_block
+//#(
+//	parameter  logic [10:0] board_position_X = 11'd32,
+//	parameter  logic [10:0] board_position_Y = 11'd160
+//)
+(
 	input [10:0] pixelX,
 	input [10:0] pixelY,
 	input clk,
@@ -23,7 +28,13 @@ module shots_block(
 	// logic and instantions
 	assign shot_dr = alive & shot_rec_dr;
 
-	shot_moveCollision player_shot_mv_inst(
+	shot_moveCollision
+//	#(
+//		.board_position_X(board_position_X),
+//		.board_position_Y(board_position_Y)
+//	)
+
+	player_shot_mv_inst(
 		.clk(clk),
 		.resetN(resetN),
 		.startOfFrame(startOfFrame),

@@ -1,18 +1,23 @@
-module	shot_moveCollision	(	
+module	shot_moveCollision
+//	#(
+//		parameter  logic [10:0] board_position_X = 11'd32,
+//		parameter  logic [10:0] board_position_Y = 11'd160
+//	)
+	(	
  
-		input	logic	clk,
-		input	logic	resetN,
-		input	logic	startOfFrame,  // short pulse every start of frame 30Hz 
-		input	logic	fireCollision,  //move left
-		input	logic	fire_pressed,  //move left
-		
-		input		logic		[1:0]		player_direction,
-		input		logic  	[10:0]	playerXPosition, // output the top left corner 
-		input	 	logic 	[10:0]	playerYPosition,  // can be negative , if the object is partliy outside 
-		
-		output	logic		alive,
-		output	logic  	[10:0]	topLeftX, // output the top left corner 
-		output	logic 	[10:0]	topLeftY  // can be negative , if the object is partliy outside 
+	input	logic	clk,
+	input	logic	resetN,
+	input	logic	startOfFrame,  // short pulse every start of frame 30Hz 
+	input	logic	fireCollision,  //move left
+	input	logic	fire_pressed,  //move left
+	
+	input		logic		[1:0]		player_direction,
+	input		logic  	[10:0]	playerXPosition, // output the top left corner 
+	input	 	logic 	[10:0]	playerYPosition,  // can be negative , if the object is partliy outside 
+	
+	output	logic		alive,
+	output	logic  	[10:0]	topLeftX, // output the top left corner 
+	output	logic 	[10:0]	topLeftY  // can be negative , if the object is partliy outside 
 					
 );
 

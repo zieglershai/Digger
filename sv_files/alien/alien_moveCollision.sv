@@ -1,7 +1,8 @@
 module alien_moveCollision 
 #(
 	parameter int INITIAL_X = 504,
-	parameter int INITIAL_Y = 344
+	parameter int INITIAL_Y = 344,
+	parameter logic [10:0] Time_To_Live = 255 // how many time the alien is dead till respwan
 )
 (
 	input	logic	clk,
@@ -100,7 +101,7 @@ module alien_moveCollision
 				end
 				else begin
 					// below is the logic related to the being hit from fire 
-					if (counter <= 11'd255) begin  // stay dead for 255 frames
+					if (counter <= Time_To_Live) begin  // stay dead for 255 frames
 						counter <= counter + 11'b1; 
 					end
 			

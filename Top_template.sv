@@ -256,8 +256,8 @@ periphery_control periphery_control_inst(
 
 
 
-parameter logic [10:0] board_position_X = 11'd32;
-parameter logic [10:0] board_position_Y = 11'd160;
+parameter logic [10:0] board_position_X = 11'd96;
+parameter logic [10:0] board_position_Y = 11'd96;
 
 
 
@@ -273,12 +273,18 @@ wire player_awake;
 
 wire terrain_dr;
 wire [11:0] terrain_RGB;
+wire dimond_eaten;
+wire all_dimond_eaten;
+
 
 wire alien_dr;
-wire [7:0] alien_RGB;
-wire [10:0] alien_a_top_leftX;
-wire [10:0] alien_a_top_leftY;
+wire [11:0] alien_RGB;
+wire [10:0] alien_a_top_leftX_a;
+wire [10:0] alien_a_top_leftY_a;
 wire [3:0] free_direction_alien_a ;
+wire [10:0] alien_a_top_leftX_b;
+wire [10:0] alien_a_top_leftY_b;
+wire [3:0] free_direction_alien_b ;
 
 wire	[7:0]	shotRGB;
 wire  shot_dr;
@@ -304,24 +310,36 @@ wire [10:0] gold_1_TLY;
 wire gold_1_can_fall;
 wire [3:0]gold_1_state;
 
-game_controller control_inst (
-    
-	 .clk(clk_25),
-    .resetN(~A),
-    .startOfFrame(startOfFrame),  
-    .drawing_request_terrain(terrain_dr),
-    .drawing_request_player(playerDR),
-	 .player_awake(player_awake),
-    .shot_dr(shot_dr),
-    .alien_dr(alien_dr),
-	 .gold_1_dr(gold_1_dr),
-	 .gold_1_state(gold_1_state),
-    .collision_player_terrain(collision_player_terrain),
-	 .colision_fire(colision_fire),
-	 .collision_gold_1(collision_gold_1),
-	 .player_eat_gold_1(player_eat_gold_1),
-	 .player_died(player_died),
-	 .alien_died_a(alien_died_a)
+
+
+wire [11:0] background_RGB;
+
+game_controller
+	#(
+		.board_position_X(board_position_X),
+		.board_position_Y(board_position_Y)
+	)
+ control_inst (
+
+	.clk(clk_25),
+	.resetN(~A),
+	.pixelX(pxl_x[10:0]),
+	.pixelY(pxl_y[10:0]),
+	.startOfFrame(startOfFrame),  
+	.drawing_request_terrain(terrain_dr),
+	.empty_square_terrain(empty_square_terrain),
+	.drawing_request_player(playerDR),
+	.player_awake(player_awake),
+	.shot_dr(shot_dr),
+	.alien_dr(alien_dr),
+	.gold_1_dr(gold_1_dr),
+	.gold_1_state(gold_1_state),
+	.collision_player_terrain(collision_player_terrain),
+	.colision_fire(colision_fire),
+	.collision_gold_1(collision_gold_1),
+	.player_eat_gold_1(player_eat_gold_1),
+	.player_died(player_died),
+	.alien_died_a(alien_died_a)
 );
 
 objects_mux mux_inst(                               
@@ -331,7 +349,7 @@ objects_mux mux_inst(
 	 .playerRGB(playerRGB),
 	 .terrain_dr(terrain_dr),
 	 .terrain_RGB(terrain_RGB),  
-	 .backGroundRGB(BG_RGB),
+	 .backGroundRGB(background_RGB),
 	 .alien_dr(alien_dr), 
 	 .alien_RGB(alien_RGB),
 	 .shot_dr(shot_dr),
@@ -348,8 +366,21 @@ objects_mux mux_inst(
 );
 
 
+background back_inst (
+	.clk(clk_25),
+	.resetN(~A),
+	.pixelX(pxl_x[10:0]),
+	.pixelY(pxl_y[10:0]),
+	.background_RGB(background_RGB)
+);
 
-player player_inst(
+
+player
+#(
+	.board_position_X(board_position_X),
+	.board_position_Y(board_position_Y)
+)
+ player_inst(
 	 .clk(clk_25),
 	 .resetN(~A),
 	 .startOfFrame(startOfFrame),
@@ -380,12 +411,18 @@ terrain_inst(
 	 .pixelX(pxl_x[10:0]),
 	 .pixelY(pxl_y[10:0]),
 	 .player_inside(playerDR),
-	 .alien_a_top_leftX(alien_a_top_leftX),
-	 .alien_a_top_leftY(alien_a_top_leftY),
+	 .alien_a_top_leftX_a(alien_a_top_leftX_a),
+	 .alien_a_top_leftY_a(alien_a_top_leftY_a),
 	 .free_direction_alien_a(free_direction_alien_a),
+	 .alien_a_top_leftX_b(alien_a_top_leftX_b),
+	 .alien_a_top_leftY_b(alien_a_top_leftY_b),
+	 .free_direction_alien_b(free_direction_alien_b),
 	 .gold_1_top_leftX(gold_1_TLX),
 	 .gold_1_top_leftY(gold_1_TLY),
 	 .gold_1_can_fall(gold_1_can_fall),
+	 .dimond_eaten(dimond_eaten),
+	 .empty_square_terrain(empty_square_terrain),
+	 .all_dimond_eaten(all_dimond_eaten),
 	 .terrainDR(terrain_dr),
 	 .terrainRGB(terrain_RGB)
 );
@@ -404,16 +441,26 @@ alien_1
 	.pixelY(pxl_y[10:0]),
 	.player_top_leftX(playerTLX),
 	.player_top_leftY(playerTLY),
-	.alien_top_leftX(alien_a_top_leftX),
-	.alien_top_leftY(alien_a_top_leftY),
+	.alien_top_leftX_a(alien_a_top_leftX_a),
+	.alien_top_leftY_a(alien_a_top_leftY_a),
+	.alien_top_leftX_b(alien_a_top_leftX_b),
+	.alien_top_leftY_b(alien_a_top_leftY_b),
+	
 	.alien_died(alien_died_a),
 	.player_died(player_died),
 	.free_direction_alien_a(free_direction_alien_a),
+	.free_direction_alien_b(free_direction_alien_b),
+
 	.alien_dr(alien_dr),
 	.alien_RGB(alien_RGB)
 );
 
-shots_block shot_inst (
+shots_block
+//#(
+//	.board_position_X(board_position_X),
+//	.board_position_Y(board_position_Y)
+//)
+ shot_inst (
 	.clk(clk_25),
 	.resetN(~A),
 	.pixelX(pxl_x[10:0]),
@@ -429,7 +476,12 @@ shots_block shot_inst (
 	);
 
 
-gold_block gold_bloc_1_inst(
+gold_block
+#(
+	.board_position_X(board_position_X),
+	.board_position_Y(board_position_Y)
+)
+gold_bloc_1_inst(
 	.clk(clk_25),
 	.resetN(~A),
 	.startOfFrame(startOfFrame),
@@ -446,7 +498,12 @@ gold_block gold_bloc_1_inst(
 
 );
 
-score_block score_inst(
+score_block
+#(
+	.board_position_X(board_position_X),
+	.board_position_Y(board_position_Y)
+)
+ score_inst(
 	.clk(clk_25),
 	.resetN(~A),	
 	.pixelX(pxl_x[10:0]),
@@ -454,7 +511,7 @@ score_block score_inst(
 	
 
 	.player_eat_gold(player_eat_gold_1),
-	.player_eat_dimond(1'b0),
+	.player_eat_dimond(dimond_eaten),
 
 	
 	.score_RGB(score_RGB),
@@ -462,7 +519,12 @@ score_block score_inst(
 
 );
 
-player_life_block life_inst(
+player_life_block
+#(
+	.board_position_X(board_position_X),
+	.board_position_Y(board_position_Y)
+)
+ life_inst(
 	.clk(clk_25),
 	.resetN(~A),	
 	.pixelX(pxl_x[10:0]),

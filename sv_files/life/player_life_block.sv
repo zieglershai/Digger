@@ -1,6 +1,11 @@
 // module life
 
-module player_life_block(
+module player_life_block
+#(
+	parameter  logic [10:0] board_position_X = 11'd32,
+	parameter  logic [10:0] board_position_Y = 11'd160
+)
+(
 	input clk,
 	input resetN,
 	input startOfFrame,
@@ -28,8 +33,8 @@ player_life_sq(
 					.resetN(resetN),
 					.pixelX(pixelX),
 					.pixelY(pixelY),
-					.topLeftX(11'd128),
-					.topLeftY(11'd128),
+					.topLeftX(board_position_X + (3 * 32)),
+					.topLeftY(board_position_Y - 11'd32),
 					.offsetX(playerLifeOffsetX),
 					.offsetY(playerLifeOffsetY),
 					.drawingRequest(InsideRectangle),

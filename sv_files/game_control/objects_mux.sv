@@ -12,7 +12,7 @@ module	objects_mux	(
 	input		logic	[11:0] terrain_RGB, 
 	
 	input		logic	alien_dr, // two set of inputs per unit
-	input		logic	[7:0] alien_RGB,
+	input		logic	[11:0] alien_RGB,
 	
 	input		logic  shot_dr,	
 	input		logic	[7:0]	shotRGB,
@@ -34,7 +34,7 @@ module	objects_mux	(
 ////////////////////////
 // background 
 
-	input		logic	[7:0] backGroundRGB, 
+	input		logic	[11:0] backGroundRGB, 
 			  
 	output	[3:0]		Red_level,
 	output	[3:0]		Green_level,
@@ -56,9 +56,9 @@ module	objects_mux	(
 				Blue_level <= playerRGB[3:0];
 			end
 			else if (alien_dr)begin
-				Red_level <= {alien_RGB[7:6], 2'b0};  //second priority 
-				Green_level <= {alien_RGB[5:3], 1'b0};
-				Blue_level <= {alien_RGB[2:0], 1'b0};
+				Red_level <= alien_RGB[11:8];  //second priority 
+				Green_level <= alien_RGB[7:4];
+				Blue_level <= alien_RGB[3:0];
 			end
 			
 			
@@ -67,12 +67,7 @@ module	objects_mux	(
 				Green_level <= gold_1_RGB[7:4];
 				Blue_level <= gold_1_RGB[3:0];
 			end
-			
-			else if (terrain_dr)begin
-				Red_level <= terrain_RGB[11:8];  //second priority 
-				Green_level <= terrain_RGB[7:4];
-				Blue_level <= terrain_RGB[3:0];
-			end
+
 			
 			else if (shot_dr)begin
 				Red_level <= {shotRGB[7:6], 2'b0};  //second priority 
@@ -81,9 +76,13 @@ module	objects_mux	(
 			end
 
 			else if (score_dr)begin
-				Red_level <= scoreRGB[11:8];  //second priority 
-				Green_level <= scoreRGB[7:4];
-				Blue_level <= scoreRGB[3:0];
+//				Red_level <= scoreRGB[11:8];  //second priority 
+//				Green_level <= scoreRGB[7:4];
+//				Blue_level <= scoreRGB[3:0];
+				
+				Red_level <= 4'hF;  //second priority 
+				Green_level <= 4'hF;
+				Blue_level <= 4'hF;
 			end
 			
 			else if (player_life_dr)begin
@@ -91,11 +90,18 @@ module	objects_mux	(
 				Green_level <= player_life_RGB[7:4];
 				Blue_level <= player_life_RGB[3:0];
 			end
+			
+						
+			else if (terrain_dr)begin
+				Red_level <= terrain_RGB[11:8];  //second priority 
+				Green_level <= terrain_RGB[7:4];
+				Blue_level <= terrain_RGB[3:0];
+			end
 
 			else begin
-				Red_level <= 4'b0;  //second priority 
-				Green_level <= 4'b0;
-				Blue_level <= 4'b0;
+				Red_level <= backGroundRGB[11:8];  //second priority 
+				Green_level <= backGroundRGB[7:4];
+				Blue_level <= backGroundRGB[3:0];
 			end  
 		end
 	end

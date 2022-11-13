@@ -6,30 +6,35 @@
 // updaed Eyal Lev Feb 2021
 
 
-module	player_moveCollision	(	
+module	player_moveCollision
+#(
+	parameter  logic [10:0] board_position_X = 11'd32,
+	parameter  logic [10:0] board_position_Y = 11'd160
+)
+(	
  
-					input	logic	clk,
-					input	logic	resetN,
-					input	logic	startOfFrame,  // short pulse every start of frame 30Hz 
-					input	logic	leftArrow,  //move left
-					input	logic	rightArrow, 	//move right
-					input	logic	downArrow,  //move left
-					input	logic	upArrow, 	//move right
-					input logic collision,  //collision if player hits an side
-					input	logic	[3:0] HitEdgeCode, //one bit per edge 
-					output logic [1:0] player_direction,
-					output	 logic signed 	[10:0]	topLeftX, // output the top left corner 
-					output	 logic signed	[10:0]	topLeftY,  // can be negative , if the object is partliy outside 
-					output	logic 	[2:0]	image,
-					output	logic		player_awake
-					
+	input	logic	clk,
+	input	logic	resetN,
+	input	logic	startOfFrame,  // short pulse every start of frame 30Hz 
+	input	logic	leftArrow,  //move left
+	input	logic	rightArrow, 	//move right
+	input	logic	downArrow,  //move left
+	input	logic	upArrow, 	//move right
+	input logic collision,  //collision if player hits an side
+	input	logic	[3:0] HitEdgeCode, //one bit per edge 
+	output logic [1:0] player_direction,
+	output	 logic signed 	[10:0]	topLeftX, // output the top left corner 
+	output	 logic signed	[10:0]	topLeftY,  // can be negative , if the object is partliy outside 
+	output	logic 	[2:0]	image,
+	output	logic		player_awake
+		
 );
 
 
 // a module used to generate the  ball trajectory.  
 
-	parameter int INITIAL_X = 240;
-	parameter int INITIAL_Y = 448;
+	parameter int INITIAL_X = board_position_X + (32 * 6);
+	parameter int INITIAL_Y = board_position_Y + (32 *9);
 	parameter int INITIAL_X_SPEED = 100;
 	parameter int INITIAL_Y_SPEED =  100;
 	parameter int MAX_Y_SPEED = 230;
@@ -89,7 +94,7 @@ module	player_moveCollision	(
 				end	
 			end
 			// check collision with right border while moving right			
-			if (HitEdgeCode [1] == 1 && collision || ((topLeftX >= 562) && rightArrow))begin 
+			if (HitEdgeCode [1] == 1 && collision || ((topLeftX >= board_position_X + (32*14)) && rightArrow))begin 
 				rightFlag <= 1;
 				XcurrentSpeed	<= 0;
 			end
@@ -108,7 +113,7 @@ module	player_moveCollision	(
 				end
 			end
 			// check collision with left border while moving left			
-			if (HitEdgeCode [3] == 1 && collision || ((topLeftX <= 15) && leftArrow )) begin
+			if (HitEdgeCode [3] == 1 && collision || ((topLeftX <= board_position_X) && leftArrow )) begin
 				leftFlag <= 1;
 				XcurrentSpeed	<= 0;
 			end
@@ -127,7 +132,7 @@ module	player_moveCollision	(
 				end	
 			end
 			// check collision with left border while moving left			
-			if (/*HitEdgeCode [2] == 1 && collision || */((topLeftY >= 442) && downArrow )) begin
+			if (/*HitEdgeCode [2] == 1 && collision || */((topLeftY >= board_position_Y +(32 * 9)) && downArrow )) begin
 				downFlag <= 1;
 				YcurrentSpeed	<= 0;
 			end
@@ -146,7 +151,7 @@ module	player_moveCollision	(
 				end
 			end
 			// check collision with left border while moving left			
-			if (HitEdgeCode [0] == 1 && collision || ((topLeftY <= 160) && upArrow )) begin
+			if (HitEdgeCode [0] == 1 && collision || ((topLeftY <= board_position_Y) && upArrow )) begin
 				upFlag <= 1;
 				YcurrentSpeed	<= 0;
 			end			
