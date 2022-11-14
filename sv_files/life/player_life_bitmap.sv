@@ -98,8 +98,9 @@ begin
 				MazeBiMapMask[2] <= 0;
 			else if (MazeBiMapMask[1])
 				MazeBiMapMask[1] <= 0;
-			else if (MazeBiMapMask[0])
+			/*else if (MazeBiMapMask[0])
 				MazeBiMapMask[0] <= 0;
+			*/
 			else
 				no_lives <= 1;
 		end

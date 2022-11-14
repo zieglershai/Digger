@@ -3,7 +3,7 @@ module	objects_mux	(
 //		--------	Clock Input	 	
 	input		logic	clk,
 	input		logic	resetN,
-		  
+	input		logic	[2:0] game_state,
 // player
 	input		logic	playerDR, // two set of inputs per unit
 	input		logic	[11:0] playerRGB, 
@@ -29,8 +29,15 @@ module	objects_mux	(
 	input		logic  player_life_dr,	
 	input		logic	[11:0]	player_life_RGB,
 
+	input		logic  game_over_dr,	
+	input		logic	[11:0]	game_over_RGB,
 
-
+	
+	input		logic  start_screen_dr,	
+	input		logic	[11:0]	start_screen_RGB,
+	
+	input		logic  win_screen_dr,	
+	input		logic	[11:0]	win_screen_RGB,
 ////////////////////////
 // background 
 
@@ -38,18 +45,23 @@ module	objects_mux	(
 			  
 	output	[3:0]		Red_level,
 	output	[3:0]		Green_level,
-	output	[3:0]		Blue_level
+	output	[3:0]		Blue_level,
+	output flag
 );
+
 
 	always_ff@(posedge clk or negedge resetN)
 	begin
 		if(!resetN) begin
 			Red_level <= 4'b0;  //second priority 
 			Green_level <= 4'b0;
-			Blue_level <= 4'b0;		end
+			Blue_level <= 4'b0;
+			flag <= 1'b0;
+		end
 		
-		else begin
-					 
+		else if (game_state == 3'd2) begin
+			flag <= 1'b0;
+
 			if (playerDR == 1'b1 )begin   
 				Red_level <= playerRGB[11:8];  //second priority 
 				Green_level <= playerRGB[7:4];
@@ -103,6 +115,47 @@ module	objects_mux	(
 				Green_level <= backGroundRGB[7:4];
 				Blue_level <= backGroundRGB[3:0];
 			end  
+		end
+		else if (game_state == 3'd1) begin
+			if (start_screen_dr == 1'b1 )begin   
+				Red_level <= start_screen_RGB[11:8];  //second priority 
+				Green_level <= start_screen_RGB[7:4];
+				Blue_level <= start_screen_RGB[3:0];
+			end
+			else begin
+				Red_level <= 4'h0;  //second priority 
+				Green_level <= 4'h0;
+				Blue_level <= 4'h0;
+			end
+		end
+		else if (game_state == 3'd4) begin
+			if (game_over_dr == 1'b1 )begin   
+				Red_level <= game_over_RGB[11:8];  //second priority 
+				Green_level <= game_over_RGB[7:4];
+				Blue_level <= game_over_RGB[3:0];
+			end
+			else begin
+				Red_level <= 4'h0;  //second priority 
+				Green_level <= 4'h0;
+				Blue_level <= 4'h0;
+			end
+		end
+		else if (game_state == 3'd3) begin
+			if (win_screen_dr == 1'b1 )begin   
+				Red_level <= win_screen_RGB[11:8];  //second priority 
+				Green_level <= win_screen_RGB[7:4];
+				Blue_level <= win_screen_RGB[3:0];
+			end
+			else begin
+				Red_level <= 4'h0;  //second priority 
+				Green_level <= 4'h0;
+				Blue_level <= 4'h0;
+			end
+		end
+		else begin
+			Red_level <= 4'h0;  //second priority 				
+			Green_level <= 4'h0;
+			Blue_level <= 4'h0;
 		end
 	end
 

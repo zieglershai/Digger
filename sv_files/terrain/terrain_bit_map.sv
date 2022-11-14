@@ -28,14 +28,16 @@ module	terrain_bit_map
 	output	logic		all_dimond_eaten,
 	output	logic	drawingRequest, //output that the pixel should be dispalyed 
 	output	logic	[11:0] RGBout,  //rgb value from the bitmap 
-	output	logic	[3:0] HitEdgeCode //one bit per edge 
+	output	logic	[3:0] HitEdgeCode, //one bit per edge 
+	output	logic [3:0] dimond_counter
+
  ) ;
  
 	wire [3:0] alien_up_a, alien_right_a, alien_down_a, alien_left_a;
 	wire [10:0] alien_x_cell_a , alien_y_cell_a;
 	wire [3:0] alien_up_b, alien_right_b, alien_down_b, alien_left_b;
 	wire [10:0] alien_x_cell_b , alien_y_cell_b;
-	wire [3:0] dimond_counter;
+//	wire [3:0] dimond_counter;
 
 	wire [10:0] gold_1_x_cell , gold_1_y_cell;
 
@@ -135,7 +137,7 @@ module	terrain_bit_map
 				empty_square_terrain <= 1'b1;
 				dimond_eaten <= 1'b0;
 				all_dimond_eaten <= 1'b0;
-				dimond_counter <= 4'd10;
+				dimond_counter <= 4'd12;
 
 			end 
 			else begin

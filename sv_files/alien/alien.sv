@@ -44,7 +44,7 @@ module alien_bloc
 	#(
 			.INITIAL_X(board_position_X + (13 * 32)),
 			.INITIAL_Y(board_position_Y + 0),
-			.Time_To_Live(11'd100)
+			.Time_To_Live(11'd300)
 	)
 	 alien_mov_inst(
 		.clk(clk),
