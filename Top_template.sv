@@ -307,9 +307,13 @@ wire alien_died_a;
 
 wire gold_1_dr;
 wire [11:0] gold_1_RGB;
-wire [10:0] gold_1_TLX;
-wire [10:0] gold_1_TLY;
-wire gold_1_can_fall;
+wire [10:0] gold_1_TLX_a;
+wire [10:0] gold_1_TLY_a;
+wire [10:0] gold_1_TLX_b;
+wire [10:0] gold_1_TLY_b;
+wire gold_1_can_fall_a;
+wire gold_1_can_fall_b;
+
 wire [3:0]gold_1_state;
 
 wire	game_over_dr;
@@ -440,9 +444,12 @@ terrain_inst(
 	 .alien_a_top_leftX_b(alien_a_top_leftX_b),
 	 .alien_a_top_leftY_b(alien_a_top_leftY_b),
 	 .free_direction_alien_b(free_direction_alien_b),
-	 .gold_1_top_leftX(gold_1_TLX),
-	 .gold_1_top_leftY(gold_1_TLY),
-	 .gold_1_can_fall(gold_1_can_fall),
+	 .gold_1_top_leftX_a(gold_1_TLX_a),
+	 .gold_1_top_leftY_a(gold_1_TLY_a),
+	 .gold_1_can_fall_a(gold_1_can_fall_a),
+	 .gold_1_top_leftX_b(gold_1_TLX_b),
+	 .gold_1_top_leftY_b(gold_1_TLY_b),
+	 .gold_1_can_fall_b(gold_1_can_fall_b),
 	 .dimond_eaten(dimond_eaten),
 	 .empty_square_terrain(empty_square_terrain),
 	 .all_dimond_eaten(all_dimond_eaten),
@@ -508,15 +515,18 @@ gold_bloc_1_inst(
 	.clk(clk_25),
 	.resetN(restart_gameN),
 	.startOfFrame(startOfFrame),
-	.can_fall(gold_1_can_fall),
+	.can_fall_a(gold_1_can_fall_a),
+	.can_fall_b(gold_1_can_fall_b),
 	.collision(collision_gold_1),
 	.been_eaten(player_eat_gold_1),
 	.pixelX(pxl_x[10:0]),
 	.pixelY(pxl_y[10:0]),    
 	.gold_dr(gold_1_dr),
 	.gold_RGB(gold_1_RGB),
-	.goldTLX(gold_1_TLX),
-	.goldTLY(gold_1_TLY),
+	.goldTLX_a(gold_1_TLX_a),
+	.goldTLY_a(gold_1_TLY_a),
+	.goldTLX_b(gold_1_TLX_b),
+	.goldTLY_b(gold_1_TLY_b),
 	.gold_state(gold_1_state)
 
 );

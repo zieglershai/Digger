@@ -13,8 +13,10 @@ module	terrain_bit_map
 	input 	[10:0]	alien_top_leftY_a,
 	input 	[10:0]	alien_top_leftX_b,
 	input 	[10:0]	alien_top_leftY_b,
-	input 	[10:0]	gold_1_top_leftX,
-	input 	[10:0]	gold_1_top_leftY,
+	input 	[10:0]	gold_1_top_leftX_a,
+	input 	[10:0]	gold_1_top_leftY_a,
+	input 	[10:0]	gold_1_top_leftX_b,
+	input 	[10:0]	gold_1_top_leftY_b,
 	input	logic	InsideRectangle, //input that the pixel is within a bracket 
 	input logic playerHit,
 
@@ -22,7 +24,9 @@ module	terrain_bit_map
 	output	logic  [3:0] free_direction_alien_a ,
 	output	logic  [3:0] free_direction_alien_b ,
 
-	output 				gold_1_can_fall,
+	output 				gold_1_can_fall_a,
+	output 				gold_1_can_fall_b,
+
 	output 				empty_square_terrain,
 	output	logic		dimond_eaten,
 	output	logic		all_dimond_eaten,
@@ -39,7 +43,8 @@ module	terrain_bit_map
 	wire [10:0] alien_x_cell_b , alien_y_cell_b;
 //	wire [3:0] dimond_counter;
 
-	wire [10:0] gold_1_x_cell , gold_1_y_cell;
+	wire [10:0] gold_1_x_cell_a , gold_1_y_cell_a;
+	wire [10:0] gold_1_x_cell_b , gold_1_y_cell_b;
 
 	logic unsigned [0:9] [0:14] [1:0] terrain_maze ;
 	logic unsigned [0:9] [0:14] [1:0] initial_game_map   = 
@@ -170,16 +175,21 @@ module	terrain_bit_map
 	
 	always_comb begin
 	
-		gold_1_x_cell = (gold_1_top_leftX - board_position_X) >> 5;
-		gold_1_y_cell = (gold_1_top_leftY - board_position_Y) >> 5;
+	//-------------gold falling logic----------------------------------------------------------------
+	
+		gold_1_x_cell_a = (gold_1_top_leftX_a - board_position_X) >> 5;
+		gold_1_y_cell_a = (gold_1_top_leftY_a - board_position_Y) >> 5;
 		// condition to going down is if we not at the last line and line below us is empty
-		gold_1_can_fall = gold_1_y_cell != 11'd9  && terrain_maze[gold_1_y_cell + 11'b1][gold_1_x_cell] == 2'b00; 
+		gold_1_can_fall_a = gold_1_y_cell_a != 11'd9  && terrain_maze[gold_1_y_cell_a + 11'b1][gold_1_x_cell_a] == 2'b00; 
 		
-		
+		gold_1_x_cell_b = (gold_1_top_leftX_b - board_position_X) >> 5;
+		gold_1_y_cell_b = (gold_1_top_leftY_b - board_position_Y) >> 5;
+		// condition to going down is if we not at the last line and line below us is empty
+		gold_1_can_fall_b = gold_1_y_cell_b != 11'd9  && terrain_maze[gold_1_y_cell_b + 11'b1][gold_1_x_cell_b] == 2'b00; 
 		
 		/*  logic for alien a */
 
-		
+	//-------------------------------------------------------------------------------------------------	
 		alien_x_cell_a = (alien_top_leftX_a - board_position_X) >> 5;
 		alien_y_cell_a = (alien_top_leftY_a - board_position_Y) >> 5;
 		
