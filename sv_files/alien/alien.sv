@@ -39,6 +39,7 @@ module alien_bloc
 	wire alive_a;
 	wire alien_dr_a;
 	wire [11:0] alien_RGB_a;
+	wire alien_died_a;
 
 	alien_moveCollision
 	#(
@@ -112,6 +113,7 @@ module alien_bloc
 	wire alive_b;
 	wire alien_dr_b;
 	wire [11:0] alien_RGB_b;
+	wire alien_died_b;
 
 
 	alien_moveCollision
@@ -174,6 +176,7 @@ module alien_bloc
 	
 	//-----------------------------------------------------------------------------
 	// rewire the signals 
+	
 	always_comb begin
 		if(alien_dr_a) begin
 			alien_died_a = alien_died;

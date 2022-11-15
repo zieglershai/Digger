@@ -32,7 +32,6 @@ module	terrain_bit_map
 	output	logic		all_dimond_eaten,
 	output	logic	drawingRequest, //output that the pixel should be dispalyed 
 	output	logic	[11:0] RGBout,  //rgb value from the bitmap 
-	output	logic	[3:0] HitEdgeCode, //one bit per edge 
 	output	logic [3:0] dimond_counter
 
  ) ;
@@ -48,7 +47,7 @@ module	terrain_bit_map
 
 	logic unsigned [0:9] [0:14] [1:0] terrain_maze ;
 	logic unsigned [0:9] [0:14] [1:0] initial_game_map   = 
-       {{2'h1, 2'h1, 2'h1, 2'h1, 2'h1, 2'h1, 2'h1, 2'h1, 2'h1, 2'h1, 2'h1, 2'h1, 2'h0, 2'h0, 2'h0},
+       {{2'h0, 2'h1, 2'h1, 2'h1, 2'h1, 2'h1, 2'h1, 2'h1, 2'h1, 2'h1, 2'h1, 2'h1, 2'h0, 2'h0, 2'h0},
         {2'h0, 2'h0, 2'h0, 2'h0, 2'h1, 2'h1, 2'h1, 2'h1, 2'h1, 2'h1, 2'h1, 2'h1, 2'h0, 2'h0, 2'h0},
         {2'h2, 2'h2, 2'h1, 2'h0, 2'h1, 2'h1, 2'h2, 2'h2, 2'h2, 2'h1, 2'h1, 2'h1, 2'h0, 2'h1, 2'h1},
         {2'h2, 2'h2, 2'h1, 2'h0, 2'h1, 2'h1, 2'h2, 2'h2, 2'h2, 2'h1, 2'h1, 2'h1, 2'h0, 2'h1, 2'h1},
@@ -137,12 +136,11 @@ module	terrain_bit_map
 		begin
 			if(!resetN) begin
 				RGBout <=	12'h000; // transparent colour
-				HitEdgeCode <= 4'h0;
 				terrain_maze <= initial_game_map;
 				empty_square_terrain <= 1'b1;
 				dimond_eaten <= 1'b0;
 				all_dimond_eaten <= 1'b0;
-				dimond_counter <= 4'd12;
+				dimond_counter <= 4'd14;
 
 			end 
 			else begin
@@ -186,9 +184,10 @@ module	terrain_bit_map
 		gold_1_y_cell_b = (gold_1_top_leftY_b - board_position_Y) >> 5;
 		// condition to going down is if we not at the last line and line below us is empty
 		gold_1_can_fall_b = gold_1_y_cell_b != 11'd9  && terrain_maze[gold_1_y_cell_b + 11'b1][gold_1_x_cell_b] == 2'b00; 
-		
+	
+	
+	//------------------------------------------------------------------------------------------------
 		/*  logic for alien a */
-
 	//-------------------------------------------------------------------------------------------------	
 		alien_x_cell_a = (alien_top_leftX_a - board_position_X) >> 5;
 		alien_y_cell_a = (alien_top_leftY_a - board_position_Y) >> 5;
@@ -229,8 +228,9 @@ module	terrain_bit_map
 		
 		
 		
+	//------------------------------------------------------------------------------------------------
 		/*  logic for alien b */
-		
+	//-------------------------------------------------------------------------------------------------		
 		
 		alien_x_cell_b = (alien_top_leftX_b - board_position_X) >> 5;
 		alien_y_cell_b = (alien_top_leftY_b - board_position_Y) >> 5;

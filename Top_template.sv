@@ -275,6 +275,7 @@ wire player_awake;
 
 wire terrain_dr;
 wire [11:0] terrain_RGB;
+wire empty_square_terrain;
 wire dimond_eaten;
 wire all_dimond_eaten;
 
@@ -288,7 +289,7 @@ wire [10:0] alien_a_top_leftX_b;
 wire [10:0] alien_a_top_leftY_b;
 wire [3:0] free_direction_alien_b ;
 
-wire	[7:0]	shotRGB;
+wire	[11:0]	shotRGB;
 wire  shot_dr;
 
 wire	[11:0]	score_RGB;
@@ -296,6 +297,7 @@ wire  score_dr;
 
 wire	[11:0]	player_life_RGB;
 wire  player_life_dr;
+wire  no_lives;
 
 
 wire	collision_player_terrain;
@@ -325,6 +327,10 @@ wire	[11:0]	start_screen_RGB;
 
 wire	win_screen_dr;
 wire	[11:0]	win_screen_RGB;
+
+wire	credit_screen_dr;
+wire	[11:0]	credit_screen_RGB;
+
 
 wire [11:0] background_RGB;
 
@@ -387,6 +393,8 @@ objects_mux mux_inst(
 	 .start_screen_RGB(start_screen_RGB),	
 	 .win_screen_dr(win_screen_dr),
  	 .win_screen_RGB(win_screen_RGB), 
+	 .credit_screen_dr(credit_screen_dr),
+	 .credit_screen_RGB(credit_screen_RGB),
 	 .Red_level(Red_level),
 	 .Green_level(Green_level),
 	 .Blue_level(Blue_level)
@@ -496,6 +504,8 @@ shots_block
 	.pixelX(pxl_x[10:0]),
 	.pixelY(pxl_y[10:0]),
 	.startOfFrame(startOfFrame),
+	.player_awake(player_awake),
+
 	.fireCollision(colision_fire),
 	.playerXPosition(playerTLX),
 	.playerYPosition(playerTLY),
@@ -598,5 +608,15 @@ win_screen win_screen_inst (
 	.startOfFrame(startOfFrame),
 	.win_screen_dr(win_screen_dr),
 	.win_screen_RGB(win_screen_RGB)
+);
+
+credit_screen credit_screen_inst (
+	.clk(clk_25),
+	.resetN(restart_gameN),
+	.pixelX(pxl_x[10:0]),
+	.pixelY(pxl_y[10:0]),
+	.startOfFrame(startOfFrame),
+	.credit_screen_dr(credit_screen_dr),
+	.credit_screen_RGB(credit_screen_RGB)
 );
 endmodule

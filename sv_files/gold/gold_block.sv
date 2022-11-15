@@ -30,7 +30,6 @@ module gold_block
 ///////////////// gold A
 
 	wire gold_dr_tmp_a;
-	wire [3:0] HitEdgeCode_a;
 	wire [10:0] gold_offsetX_a;
 	wire [10:0] gold_offsetY_a;
 	wire gold_rec_dr_a;
@@ -51,7 +50,6 @@ module gold_block
 		.resetN(resetN),
 		.startOfFrame(startOfFrame),  // short pulse every start of frame 30Hz 
 		.can_fall(can_fall_a),
-		.HitEdgeCode(HitEdgeCode), //one bit per edge 
 		.collision(collision_a),
 		.been_eaten(been_eaten_a),
 		.side(gold_offsetX_a[4]), // MSB of possible object offset (range is from 0 to 31)
@@ -88,8 +86,7 @@ module gold_block
 		.image(image_a),
 		.InsideRectangle(gold_rec_dr_a),
 		.drawingRequest(gold_dr_tmp_a),
-		.RGBout(gold_RGB_a),  
-		.HitEdgeCode(HitEdgeCode_a)
+		.RGBout(gold_RGB_a)
 		
 );
 
@@ -100,7 +97,6 @@ assign gold_dr_a = gold_dr_tmp_a && gold_state_a != 4'd3; // if gold wasn't eate
 /////---------------------------------------------
 ///---------gold b---------------------------------
 	wire gold_dr_tmp_b;
-	wire [3:0] HitEdgeCode_b;
 	wire [10:0] gold_offsetX_b;
 	wire [10:0] gold_offsetY_b;
 	wire gold_rec_dr_b;
@@ -115,7 +111,7 @@ assign gold_dr_a = gold_dr_tmp_a && gold_state_a != 4'd3; // if gold wasn't eate
 	
 	gold_moveCollision
 	#(
-			.INITIAL_X(board_position_X + (8 * 32)),
+			.INITIAL_X(board_position_X + (9 * 32)),
 			.INITIAL_Y(board_position_Y + (3 * 32))
 	)
 	gold_mov_inst_b(
@@ -123,9 +119,8 @@ assign gold_dr_a = gold_dr_tmp_a && gold_state_a != 4'd3; // if gold wasn't eate
 		.resetN(resetN),
 		.startOfFrame(startOfFrame),  // short pulse every start of frame 30Hz 
 		.can_fall(can_fall_b),
-		.HitEdgeCode(HitEdgeCode), //one bit per edge 
 		.collision(collision_b),
-		.been_eaten(been_eaten),
+		.been_eaten(been_eaten_b),
 		.side(gold_offsetX_b[4]), // MSB of possible object offset (range is from 0 to 31)
 		.image(image_b),
 		.gold_state(gold_state_b), 
@@ -160,8 +155,7 @@ assign gold_dr_a = gold_dr_tmp_a && gold_state_a != 4'd3; // if gold wasn't eate
 		.image(image_b),
 		.InsideRectangle(gold_rec_dr_b),
 		.drawingRequest(gold_dr_tmp_b),
-		.RGBout(gold_RGB_b),  
-		.HitEdgeCode(HitEdgeCode_b)
+		.RGBout(gold_RGB_b)
 		
 );
 

@@ -50,6 +50,11 @@ analog_input analog_input_inst(
 	wire prev_Up;
 	wire prev_Down;
 	
+	wire tmp_Left;
+	wire tmp_Right;
+	wire tmp_Up;
+	wire tmp_Down;
+	
 	wire [31:0] counter;
 	
 	wire flag;

@@ -15,7 +15,7 @@ module score_bit_map	(
 
 
 
-wire logic[4:0] singles, tens, hunderes, thousands;
+wire logic[4:0]  hunderes, thousands;
 bit [0:9] [0:15] [0:7] number_bitmap  = {
 
 
@@ -225,8 +225,6 @@ bit [0:9] [0:15] [0:7] number_bitmap  = {
 	always_ff@(posedge clk or negedge resetN)
 	begin
 		if(!resetN) begin
-			singles <= 5'b0;
-			tens <= 5'b0;
 			hunderes <= 5'b0;
 			thousands <= 5'b0;
 		end

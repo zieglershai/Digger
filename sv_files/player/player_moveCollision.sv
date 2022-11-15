@@ -33,12 +33,10 @@ module	player_moveCollision
 
 // a module used to generate the  ball trajectory.  
 
-	parameter int INITIAL_X = board_position_X + (32 * 6);
-	parameter int INITIAL_Y = board_position_Y + (32 *9);
-	parameter int INITIAL_X_SPEED = 100;
-	parameter int INITIAL_Y_SPEED =  100;
-	parameter int MAX_Y_SPEED = 230;
-	const int  Y_ACCEL = 0;//-1;
+	int INITIAL_X = board_position_X + (32 * 6);
+	int INITIAL_Y = board_position_Y + (32 *9);
+	int INITIAL_X_SPEED = 100;
+	int INITIAL_Y_SPEED =  100;
 
 	const int	FIXED_POINT_MULTIPLIER	=	64;
 	// FIXED_POINT_MULTIPLIER is used to enable working with integers in high resolution so that 
@@ -75,7 +73,8 @@ module	player_moveCollision
 
 		end
 		else begin
-			
+			Xspeed <= Xspeed;
+			Yspeed <= Yspeed;
 			if (collision && alive) begin
 				alive <= 1'b0;
 			end	

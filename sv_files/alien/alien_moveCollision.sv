@@ -20,20 +20,15 @@ module alien_moveCollision
 
 );
 
-	parameter int INITIAL_X_SPEED = 128;
-	parameter int INITIAL_Y_SPEED =  128;
-	parameter int MAX_Y_SPEED = 230;
-	const int  Y_ACCEL = 0;//-1;
+	int INITIAL_X_SPEED = 128;
+	int INITIAL_Y_SPEED =  128;
 
 	const int	FIXED_POINT_MULTIPLIER	=	64;
 	// FIXED_POINT_MULTIPLIER is used to enable working with integers in high resolution so that 
 	// we do all calculations with topLeftX_FixedPoint to get a resolution of 1/64 pixel in calcuatuions,
 	// we devide at the end by FIXED_POINT_MULTIPLIER which must be 2^n, to return to the initial proportions
 
-	typedef enum {idle, dead_end, two_way, junction} road_state;
 	
-	road_state current_state;
-	road_state next_state;
 	logic [3:0] free_direction_sum; 
 	int Xspeed, XcurrentSpeed, topLeftX_FixedPoint; // local parameters 
 	int Yspeed, YcurrentSpeed, topLeftY_FixedPoint;
@@ -50,7 +45,6 @@ module alien_moveCollision
 		if(!resetN)
 		begin
 			direction <= 2'b11; 
-			current_state = idle;
 			XcurrentSpeed	<= 0;
 			YcurrentSpeed	<= 0;
 			topLeftX_FixedPoint	<= INITIAL_X * FIXED_POINT_MULTIPLIER;
@@ -68,9 +62,9 @@ module alien_moveCollision
 			end
 				
 		
-			current_state = next_state;
 			direction <= next_direction;
-			// implement movment:
+			//-------------------------------------------------------------------------------------
+			// implement movment: first be in the center and than move to the relevant direction
 			if (next_direction == 2'b00) begin // if we need to move up
 				YcurrentSpeed <= -Yspeed;
 				XcurrentSpeed <= 0;
@@ -89,6 +83,8 @@ module alien_moveCollision
 				XcurrentSpeed <= -Xspeed;
 				YcurrentSpeed <= 0;
 			end
+			//---------------------------------------------------------------------------------------
+			
 			// update location at end of frame	
 			if (startOfFrame == 1'b1 & move ) begin//&& Yspeed != 0) 
 				if (alive == 1'b1) begin
@@ -117,26 +113,25 @@ module alien_moveCollision
 	end
 	
 	
+	
+	
+	//--------------------
+	///-------FSM
+	/// each state represent the state of the road
+	/// for each state there is different logic of movment
 	always_comb begin
 		// defults:
 		move = 1'b1;
 		next_direction = 2'b11;
 		free_direction_sum = {2'b0, free_direction[3]} + {2'b0, free_direction[2]} + {2'b0, free_direction[1]} + {2'b0, free_direction[0]}; // add a bit to the left to prevent overflow
 		// select the next state based on number of possible ways
-		if (free_direction_sum == 4'd3 || free_direction_sum == 4'd4)begin
-			next_state = junction;
-		end
-		else if (free_direction_sum == 2'd2)begin
-			next_state = two_way;
-		end
-		else begin
-			next_state = dead_end;
-		end
 
 		case (free_direction_sum)
+			
 			2'b0: begin
 				move = 1'b0;
 			end
+			
 			2'b1: begin
 			// there is one way find it:
 				if (free_direction[3] == 1'b1)begin // only way is up
@@ -152,8 +147,9 @@ module alien_moveCollision
 					next_direction = 2'b11;
 				end
 			end
+			
 			4'd2: begin
-
+				//on 2 way we would want to keep going the same way
 				// if we went up before
 				if (direction == 2'b00) begin 
 					if (free_direction[3] == 1'b1)begin // we can go the same direction (up)
@@ -207,8 +203,10 @@ module alien_moveCollision
 					end
 				end
 			end
+			
+			
 			4'd3, 4'd4: begin
-
+	
 				// if we are in juction we would choose the path that will lead us to the player:
 				// and at eighther x axis or y-axis will be available
 				// we want to compare the distance at block unit (32pixel * 32 pixel)

@@ -1,16 +1,16 @@
 
 module	alien_bitmap	(	
-					input	logic	clk,
-					input	logic	resetN,
-					input startOfFrame,
-					input logic	[10:0] offsetX,// offset from top left  position 
-					input logic	[10:0] offsetY,
-					input	logic	InsideRectangle, //input that the pixel is within a bracket 
-					input	logic	playerHit, //input that the pixel is within a bracket 
+	input	logic	clk,
+	input	logic	resetN,
+	input startOfFrame,
+	input logic	[10:0] offsetX,// offset from top left  position 
+	input logic	[10:0] offsetY,
+	input	logic	InsideRectangle, //input that the pixel is within a bracket 
+	input	logic	playerHit, //input that the pixel is within a bracket 
 
-					output	logic	drawingRequest, //output that the pixel should be dispalyed 
-					output	logic	[11:0] RGBout,  //rgb value from the bitmap 
-					output	logic	[3:0] HitEdgeCode //one bit per edge 
+	output	logic	drawingRequest, //output that the pixel should be dispalyed 
+	output	logic	[11:0] RGBout,  //rgb value from the bitmap 
+	output	logic	[3:0] HitEdgeCode //one bit per edge 
  ) ;
 
 // this is the devider used to acess the right pixel 

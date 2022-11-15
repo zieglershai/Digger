@@ -24,9 +24,8 @@ module  gold_moveCollision
 
 
 
-	parameter int INITIAL_X_SPEED = 128;
-	parameter int INITIAL_Y_SPEED =  128;
-	parameter int MAX_Y_SPEED = 400;
+	int INITIAL_X_SPEED = 128;
+	int INITIAL_Y_SPEED =  128;
 	
 
 
@@ -43,6 +42,7 @@ module  gold_moveCollision
 	wire [9:0]	counter, next_counter, falling_counter, falling_counter_next;
 	//////////--------------------------------------------------------------------------------------------------------------=
 	//  calculation X Axis speed using and position calculate regarding X_direction key or  colision
+	/// use the syncronious part to move the states
 	always_ff@(posedge clk or negedge resetN)
 	begin
 		if(!resetN)
@@ -72,6 +72,10 @@ module  gold_moveCollision
 		end
 	end
 	
+	
+	///------------------------------------
+	//---------FSM for the gold movment
+	// the gold can stay still, move to the sieds or fall
 	always_comb begin
 		next_state = idle;
 		Xspeed = 32'b0;
@@ -82,8 +86,8 @@ module  gold_moveCollision
 		image = 3'b0;// tilt side is normal
 		falling_counter_next = 10'b0;
 		case(current_state)
-		
-			idle: begin
+			// if nothing happen wait for a signal
+			idle: begin  // 
 				if (collsion_flag == 1'b1) begin
 					if (side == 1'b1) begin // a collision from the right
 						Xspeed = -INITIAL_X_SPEED;
@@ -103,15 +107,19 @@ module  gold_moveCollision
 					next_state = crashed;
 				end 
 			end
+			
+			// wait till start of frame and actually started to move
 			pre_moving_r:begin
 			state = 3'd1;
 				Xspeed =  INITIAL_X_SPEED;
 				if (topLeftX[4:0] == 5'b0) begin
 					next_state = pre_moving_r;
 				end
-				else begin
+				else begin  // once moved proceed to next state
 					next_state = moving_r;
 				end			end
+			
+			// wait till start of frame and actually started to move
 			pre_moving_l:begin
 				state = 3'd2;
 
@@ -119,10 +127,12 @@ module  gold_moveCollision
 				if (topLeftX[4:0] == 5'b0) begin
 					next_state = pre_moving_l;
 				end
-				else begin
+				else begin  // once moved proceed to next state
 					next_state = moving_l;
 				end
 			end
+			
+			// once started to move continue to the next cell
 			moving_r:begin
 				if (topLeftX[4:0] == 5'b0)begin // if we got to new cell
 					next_state = idle;
@@ -132,6 +142,8 @@ module  gold_moveCollision
 					Xspeed =  INITIAL_X_SPEED;  // keep move till the next cell
 				end
 			end
+			
+			// once started to move continue to the next cell
 			moving_l:begin
 				if (topLeftX[4:0] == 5'b0)begin // if we got to new cell
 					next_state = idle;
@@ -141,10 +153,12 @@ module  gold_moveCollision
 					Xspeed =  -INITIAL_X_SPEED;  // keep move till the next cell
 				end
 			end
+			
+			// wait 50 frames and shake till fall
 			pre_falling: begin
 				state = 3'd3;
 				next_counter = counter + 10'b1;
-				if (counter <= 10'd90)begin // wait 500 frames till start to fall
+				if (counter <= 10'd50)begin // wait 500 frames till start to fall
 					next_state = pre_falling;
 					if (counter[5:4] == 2'b0 || counter[5:4] == 2'd2) begin
 						image = 3'd0;
@@ -167,6 +181,8 @@ module  gold_moveCollision
 					end
 				end
 			end
+			
+			// once falling remember the last cell so we know wheter to crash or not
 			falling:begin
 				gold_state = 4'd1;
 				falling_counter_next = falling_counter + 10'b1;
@@ -178,6 +194,8 @@ module  gold_moveCollision
 					next_state = falling;
 				end
 			end
+			
+			// wait till being eaten
 			crashed:begin
 				gold_state = 4'd2;
 				if (been_eaten) begin
@@ -189,6 +207,8 @@ module  gold_moveCollision
 				end
 
 			end
+			
+			// dont display
 			eaten:begin
 				gold_state = 4'd3;
 				next_state = eaten;

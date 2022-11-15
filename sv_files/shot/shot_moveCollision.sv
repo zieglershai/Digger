@@ -10,6 +10,7 @@ module	shot_moveCollision
 	input	logic	startOfFrame,  // short pulse every start of frame 30Hz 
 	input	logic	fireCollision,  //move left
 	input	logic	fire_pressed,  //move left
+	input logic player_awake,
 	
 	input		logic		[1:0]		player_direction,
 	input		logic  	[10:0]	playerXPosition, // output the top left corner 
@@ -49,7 +50,7 @@ begin
 	end
 	else begin
 		
-		if(fire_pressed && !alive) begin
+		if(fire_pressed && !alive & player_awake) begin
 			topLeftX_FixedPoint <= (playerXPosition + 16) * FIXED_POINT_MULTIPLIER;
 			topLeftY_FixedPoint <= (playerYPosition + 16) * FIXED_POINT_MULTIPLIER;
 			alive <= 1;

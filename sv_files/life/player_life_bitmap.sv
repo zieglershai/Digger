@@ -1,16 +1,16 @@
 
 module	player_life_bitmap	(	
-					input	logic	clk,
-					input	logic	resetN,
-					input logic	[10:0] offsetX,// offset from top left  position 
-					input logic	[10:0] offsetY,
-					input	logic	InsideRectangle, //input that the pixel is within a bracket 
-					input logic playGame,
-					input logic player_died,
+	input	logic	clk,
+	input	logic	resetN,
+	input logic	[10:0] offsetX,// offset from top left  position 
+	input logic	[10:0] offsetY,
+	input	logic	InsideRectangle, //input that the pixel is within a bracket 
+	input logic playGame,
+	input logic player_died,
 
-					output	logic	drawingRequest, //output that the pixel should be dispalyed 
-					output	logic	[11:0] RGBout,  //rgb value from the bitmap 
-					output	logic no_lives
+	output	logic	drawingRequest, //output that the pixel should be dispalyed 
+	output	logic	[11:0] RGBout,  //rgb value from the bitmap 
+	output	logic no_lives
 
  ) ;
 
@@ -81,37 +81,37 @@ logic [0:OBJECT_HEIGHT_Y-1] [0:OBJECT_WIDTH_X-1][11:0] object_colors = {
 // pipeline (ff) to get the pixel color from the array 	 
 
 //////////--------------------------------------------------------------------------------------------------------------=
-always_ff@(posedge clk  or negedge resetN)
-begin
-	if(!resetN) begin
-		MazeBiMapMask <= initial_life;
-		no_lives <= 0;
+	always_ff@(posedge clk  or negedge resetN)
+	begin
+		if(!resetN) begin
+			MazeBiMapMask <= initial_life;
+			no_lives <= 0;
 
-	end
-	
-
-
-	else begin
-	
-		if (player_died) begin
-			if (MazeBiMapMask[2])
-				MazeBiMapMask[2] <= 0;
-			else if (MazeBiMapMask[1])
-				MazeBiMapMask[1] <= 0;
-			/*else if (MazeBiMapMask[0])
-				MazeBiMapMask[0] <= 0;
-			*/
-			else
-				no_lives <= 1;
 		end
-		 	
-	end
 		
-end
+
+
+		else begin
+			 /// for each collosion delete one life
+			if (player_died) begin
+				if (MazeBiMapMask[2])
+					MazeBiMapMask[2] <= 0;
+				else if (MazeBiMapMask[1])
+					MazeBiMapMask[1] <= 0;
+				/*else if (MazeBiMapMask[0])
+					MazeBiMapMask[0] <= 0;
+				*/
+				else
+					no_lives <= 1;
+			end
+				
+		end
+			
+	end
 
 //////////--------------------------------------------------------------------------------------------------------------=
 // decide if to draw the pixel or not 
-assign drawingRequest = MazeBiMapMask[offsetX[8:5]] && object_colors[offsetY][offsetX] != TRANSPARENT_ENCODING;  // in the area and have enough life and ligtehn pixel
-assign RGBout = object_colors[offsetY][offsetX];
+	assign drawingRequest = MazeBiMapMask[offsetX[8:5]] && object_colors[offsetY][offsetX] != TRANSPARENT_ENCODING;  // in the area and have enough life and ligtehn pixel
+	assign RGBout = object_colors[offsetY][offsetX];
 
 endmodule

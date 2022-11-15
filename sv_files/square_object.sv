@@ -1,8 +1,3 @@
-//-- Alex Grinshpun Apr 2017
-//-- Dudy Nov 13 2017
-// System-Verilog Alex Grinshpun May 2018
-// New coding convention dudy December 2018
-// (c) Technion IIT, Department of Electrical Engineering 2021 
 
 
 module	square_object
