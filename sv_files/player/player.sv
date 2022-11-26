@@ -73,6 +73,7 @@ player_sq(
 player_bit_map player_bit_inst(		
 	.clk(clk),
 	.resetN(resetN),
+	.startOfFrame(startOfFrame),
 	.offsetX(playerOffsetX),
 	.offsetY(playerOffsetY),
 	.InsideRectangle(playerRecDR),
@@ -81,7 +82,9 @@ player_bit_map player_bit_inst(
 	.RGBout(playerRGB),  
 	.image(image),
 	.HitEdgeCode(HitEdgeCode),
-	.player_direction(player_direction)
+	.player_direction(player_direction),
+	.player_awake(player_awake)
+
 );
 			
 			

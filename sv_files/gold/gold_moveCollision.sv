@@ -158,12 +158,12 @@ module  gold_moveCollision
 			pre_falling: begin
 				state = 3'd3;
 				next_counter = counter + 10'b1;
-				if (counter <= 10'd50)begin // wait 500 frames till start to fall
+				if (counter <= 10'd24)begin // wait 500 frames till start to fall
 					next_state = pre_falling;
-					if (counter[5:4] == 2'b0 || counter[5:4] == 2'd2) begin
+					if (counter[4:3] == 2'b0 || counter[4:3] == 2'd2) begin
 						image = 3'd0;
 					end
-					else if (counter[5:4] == 2'b1) begin
+					else if (counter[4:3] == 2'b1) begin
 						image = 3'd1;
 					end
 					else begin

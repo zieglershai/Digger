@@ -25,8 +25,8 @@ module score_block
 	
 	
 square_object 	#(
-			.OBJECT_WIDTH_X(32),
-			.OBJECT_HEIGHT_Y(16)
+			.OBJECT_WIDTH_X(64),
+			.OBJECT_HEIGHT_Y(32)
 )
 score_sq(
 	.clk(clk),
@@ -34,7 +34,7 @@ score_sq(
 	.pixelX(pixelX),
 	.pixelY(pixelY),
 	.topLeftX(board_position_X),
-	.topLeftY(board_position_Y - 11'd32),
+	.topLeftY(board_position_Y - 11'd40),
 	.offsetX(scoreOffsetX),
 	.offsetY(scoreOffsetY),
 	.drawingRequest(score_rec_dr),

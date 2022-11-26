@@ -94,13 +94,10 @@ module	objects_mux	(
 			end
 
 			else if (score_dr)begin
-//				Red_level <= scoreRGB[11:8];  
-//				Green_level <= scoreRGB[7:4];
-//				Blue_level <= scoreRGB[3:0];
-				
-				Red_level <= 4'hF;  
-				Green_level <= 4'hF;
-				Blue_level <= 4'hF;
+				Red_level <= scoreRGB[11:8];  
+				Green_level <= scoreRGB[7:4];
+				Blue_level <= scoreRGB[3:0];
+
 			end
 			
 			else if (player_life_dr)begin

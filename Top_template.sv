@@ -218,6 +218,8 @@ assign HEX0 = 8'b11111111;
 assign HEX1 = 8'b11111111;
 assign HEX2 = 8'b11111111;
 assign HEX3 = 8'b11111111;
+assign HEX4 = 8'b11111111;
+assign HEX5 = 8'b11111111;
 
 // periphery_control module for external units: joystick, wheel and buttons (A,B, Select and Start) 
 periphery_control periphery_control_inst(
@@ -244,15 +246,7 @@ periphery_control periphery_control_inst(
 	assign LEDR[7] = Up; 		// UP
 	assign LEDR[6] = Down; 		// DOWN
 
-	seven_segment ss5(
-	.in_hex(Wheel[11:8]),
-	.out_to_ss(HEX5)
-);
 
-	seven_segment ss4(
-	.in_hex(Wheel[7:4]),
-	.out_to_ss(HEX4)
-);
 
 
 

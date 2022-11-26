@@ -28,7 +28,7 @@ localparam  int OBJECT_WIDTH_X_DIVIDER =  OBJECT_NUMBER_OF_X_BITS - 2;
 
 // generating a smiley bitmap
 
-localparam logic [11:0] TRANSPARENT_ENCODING = 12'h000 ;// RGB value in the bitmap representing a transparent pixel 
+localparam logic [11:0] TRANSPARENT_ENCODING = 12'h111 ;// RGB value in the bitmap representing a transparent pixel 
 
 
 logic unsigned [0:2] initial_life = { 1'b1, 1'b1, 1'b1}; //fukcer
@@ -111,7 +111,7 @@ logic [0:OBJECT_HEIGHT_Y-1] [0:OBJECT_WIDTH_X-1][11:0] object_colors = {
 
 //////////--------------------------------------------------------------------------------------------------------------=
 // decide if to draw the pixel or not 
-	assign drawingRequest = MazeBiMapMask[offsetX[8:5]] && object_colors[offsetY][offsetX] != TRANSPARENT_ENCODING;  // in the area and have enough life and ligtehn pixel
+	assign drawingRequest = MazeBiMapMask[offsetX[8:5]] && object_colors[offsetY][offsetX] != TRANSPARENT_ENCODING  & InsideRectangle;  // in the area and have enough life and ligtehn pixel
 	assign RGBout = object_colors[offsetY][offsetX];
 
 endmodule
